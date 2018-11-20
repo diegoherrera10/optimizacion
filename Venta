@@ -1,0 +1,49 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Oct 13 11:24:06 2018
+
+@author: salan406
+"""
+
+import scipy.optimize as opti
+import numpy as np
+
+a = 5
+b = 4
+d = 5
+
+xt = [6,6,8,7,8,2,3,10]
+
+inventario = 50
+
+#time = [1,2,3,4,5,6,7,8]
+
+
+
+def ptx (x_t,a = 5,b = 4,d = 5,t = np.linspace(1,8,8)):
+    return (a-b*x_t)*(d/(d+t))
+
+#def xtp (value,t,pt):
+#    a = value[0]
+#    b = value[1]
+#    d = value[2]
+#    return (1/b)*(a-pt*((d+t)/d))
+    
+def fx (x_t,a = 5,b = 4,d = 5, t = np.linspace(1,8,8)):
+   return -1.0 * np.sum(x_t*ptx(x_t,a,b,d,t))
+
+def restric (x_t):
+    return inventario - np.sum(x_t)
+      
+
+
+tupla = tuple((0, a/b) for i in range(len(xt)))
+
+
+diccionario = ({"type": "ineq", "fun":restric})
+
+optimizacion = opti.minimize(fx, xt, method = "SLSQP",
+                             bounds = tupla, constraints = diccionario )
+
+
+
